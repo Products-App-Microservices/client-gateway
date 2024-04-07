@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { EnvConfig } from './config/env';
+
 import { ProductsModule } from './products/products.module';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { PRODUCTS_MICROSERVICE } from './config/services';
+
+import { EnvConfig } from './config/env';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { PRODUCTS_MICROSERVICE } from './config/services';
       load: [ EnvConfig ]
     }),
     ProductsModule,
+    OrdersModule,
   ],
   controllers: [],
   providers: [],
