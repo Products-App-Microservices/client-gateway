@@ -5,6 +5,7 @@ import { ProductsModule } from './products/products.module';
 
 import { EnvConfig } from './config/env';
 import { OrdersModule } from './orders/orders.module';
+import { NatsModule } from './nats/nats.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { OrdersModule } from './orders/orders.module';
     }),
     ProductsModule,
     OrdersModule,
+    NatsModule,
   ],
   controllers: [],
   providers: [],

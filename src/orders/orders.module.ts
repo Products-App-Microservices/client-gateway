@@ -4,23 +4,11 @@ import { Module } from '@nestjs/common';
 
 import { ORDERS_MICROSERVICE } from 'src/config/services';
 import { OrdersController } from './orders.controller';
+import { NatsModule } from 'src/nats/nats.module';
 
 @Module({
   imports: [
-    ClientsModule.registerAsync([
-      {
-        name: ORDERS_MICROSERVICE,
-        imports: [ConfigModule],
-        inject: [ConfigService],
-        useFactory: ( configService: ConfigService ) => ({
-          transport: Transport.TCP,
-          options: {
-            host: configService.getOrThrow<string>('ORDERS_MICROSERVICE_HOST'),
-            port: configService.getOrThrow<number>('ORDERS_MIRCOSERVICE_PORT'),
-          }
-        })
-      }
-    ]),
+    NatsModule,
   ],
   controllers: [OrdersController],
   providers: [],

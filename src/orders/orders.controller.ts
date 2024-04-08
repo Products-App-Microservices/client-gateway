@@ -3,30 +3,30 @@ import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { catchError } from 'rxjs';
 
 import { UpdateOrderStatusDto, CreateOrderDto, OrderPaginationDto } from './dto';
-import { ORDERS_MICROSERVICE } from 'src/config/services';
+import { NATS_SERVICE } from 'src/config/services';
 
 @Controller('orders')
 export class OrdersController {
   constructor(
-    @Inject(ORDERS_MICROSERVICE)
-    private readonly ordersService: ClientProxy,
+    @Inject(NATS_SERVICE)
+    private readonly client: ClientProxy,
   ) {}
 
   @Post()
   create(@Body() createOrderDto: CreateOrderDto) {
-    return this.ordersService.send({ cmd: 'create' }, createOrderDto)
+    return this.client.send({ cmd: 'create' }, createOrderDto)
       .pipe( catchError( err => { throw new RpcException(err) } ) );
   }
 
   @Get()
   findAll(@Query() orderPaginationDto: OrderPaginationDto) {
-    return this.ordersService.send({ cmd: 'find_all' }, orderPaginationDto)
+    return this.client.send({ cmd: 'find_all' }, orderPaginationDto)
       .pipe( catchError( err  => { throw new RpcException(err) } ) );
   }
 
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.ordersService.send({ cmd: 'find_one' }, { id })
+    return this.client.send({ cmd: 'find_one' }, { id })
       .pipe( catchError(err => { throw new RpcException(err) }) );
   }
 
@@ -35,7 +35,7 @@ export class OrdersController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateOrderStatusDto: UpdateOrderStatusDto,
   ) {
-    return this.ordersService.send({ cmd: 'update_order_status' }, { id: id, status: updateOrderStatusDto.status })
+    return this.client.send({ cmd: 'update_order_status' }, { id: id, status: updateOrderStatusDto.status })
       .pipe( catchError( err => { throw new RpcException(err) }) );
   }
 
