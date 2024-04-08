@@ -1,24 +1,14 @@
-import { IsBoolean, IsEnum, IsNumber, IsPositive } from "class-validator";
-import { OrderStatusEnum } from "../enums/order-status.enum";
+import { ArrayMinSize, IsArray, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 
+import { OrderItemDto } from '.';
+
 export class CreateOrderDto {
-    @IsNumber()
-    @IsPositive()
-    @Type(() => Number)
-    totalAmount: number;
-    
-    
-    @IsNumber()
-    @IsPositive()
-    @Type(() => Number)
-    totalItems: number;
 
-    @IsEnum(OrderStatusEnum, {
-        message: `The provided status must be in ${ OrderStatusEnum }`
-    })
-    status: string;
+    @IsArray()
+    @ArrayMinSize(1)
+    @ValidateNested({ each: true })
+    @Type(() => OrderItemDto)
+    items: OrderItemDto[];
 
-    @IsBoolean()
-    paid: boolean;
 }
