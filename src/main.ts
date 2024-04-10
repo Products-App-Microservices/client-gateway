@@ -18,6 +18,7 @@ async function bootstrap() {
   app.useGlobalFilters(new RpcCustomExceptionFilter())
   
   await app.listen(process.env.PORT);
+  console.log("Probando los submodules de git");
 
   logger.log(`Client gateway running on port ${ process.env.PORT }`);
 }
