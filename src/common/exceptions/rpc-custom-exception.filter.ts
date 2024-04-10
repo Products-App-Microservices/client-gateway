@@ -9,6 +9,13 @@ export class RpcCustomExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
 
+    if (error.toString().includes('Empty response')) {
+      return response.status(500).json({
+        status: 500,
+        message: error.toString().slice(0, error.toString().indexOf('(') - 1)
+      });
+    }
+
     if (
       typeof error === 'object' && 
       'status' in error && 
