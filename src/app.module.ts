@@ -2,10 +2,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import { ProductsModule } from './products/products.module';
-
-import { EnvConfig } from './config/env';
 import { OrdersModule } from './orders/orders.module';
 import { NatsModule } from './nats/nats.module';
+import { AuthModule } from './auth/auth.module';
+
+import { EnvConfig } from './config/env';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { NatsModule } from './nats/nats.module';
     ProductsModule,
     OrdersModule,
     NatsModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
