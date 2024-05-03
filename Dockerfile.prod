@@ -1,0 +1,39 @@
+# Dependencies
+FROM node:21-alpine3.19 as deps
+
+WORKDIR /usr/app/src
+
+COPY ./package*.json .
+
+RUN npm install
+
+
+# Builder
+FROM node:21-alpine3.19 as builder
+
+WORKDIR /usr/app/src
+
+COPY --from=deps /usr/app/src/node_modules ./node_modules
+
+COPY . .
+
+RUN npm run build
+
+RUN npm ci -f --only=production && npm cache clean --force
+
+
+# Production
+FROM node:21-alpine3.19 as prod
+
+WORKDIR /usr/app/src
+
+COPY --from=builder /usr/app/src/node_modules ./node_modules
+COPY --from=builder /usr/app/src/dist ./dist
+
+ENV NODE_ENV=production
+
+USER node
+
+EXPOSE 3000
+
+CMD [ "node", "dist/main.js" ]
